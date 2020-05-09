@@ -156,8 +156,8 @@ function sortDb(filteredDb){
 }
 
 function getData(baza, year){
-    var filter = filterDb(baza, year)
-    return sortDb(filter)
+    var filtered = filterDb(baza, year)
+    return sortDb(filtered)
 }
 
 function outputData(us, eu, jp, sa, year){
