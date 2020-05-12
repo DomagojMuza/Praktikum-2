@@ -72,6 +72,8 @@ var jp_db = [
 // Q, H1, H2, dur, time, date, month, year, lat, lng
 var sa_db = [
     [12, 32, 34, 65, "19:10:50", 2, 9, 2018, 3458, 3456 ],
+    [12, 32, 34, 65, "19:10:50", 2, 3, 2018, 3458, 3456 ],
+    [12, 32, 34, 65, "19:10:50", 2, 5, 2018, 3458, 3456 ],
     [12, 32, 34, 65, "19:10:50", 3, 9, 2019, 3458, 3456 ],
     [12, 32, 34, 65, "19:10:50", 3, 9, 2019, 3458, 3456 ],
     [12, 32, 34, 65, "19:10:50", 5, 8, 2019, 3458, 3456 ],
@@ -87,12 +89,13 @@ function findMaxCommets(eu_db, us_db, jp_db, sa_db, year) {
     var eu = formatEuDb(eu_db)
     var jp = formatJpDb(jp_db)
     var sa = formatSaDb(sa_db)
-    var output = outputData(us, eu, jp, sa, year)
+    
+    var output = outputData({us, eu, jp, sa}, year)
     console.table(output)
 }
 
 
-findMaxCommets(eu_db, us_db, jp_db, sa_db, 2019)
+findMaxCommets(eu_db, us_db, jp_db, sa_db, 2018)
 
 
 
@@ -135,6 +138,7 @@ function formatSaDb(baza){
     })
 }
 
+
 function filterDb(formatedDb, filterYear){
     return formatedDb.filter(({year}) =>{
         return year === filterYear
@@ -156,19 +160,15 @@ function sortDb(filteredDb){
 }
 
 function getData(baza, year){
-    var filtered = filterDb(baza, year)
-    return sortDb(filtered)
+    var filter = filterDb(baza, year)
+    return sortDb(filter)
 }
 
-function outputData(us, eu, jp, sa, year){
-    var db = {}
-    var usData = getData(us, year)
-    var euData = getData(eu, year)
-    var jpData = getData(jp, year)
-    var saData = getData(sa, year)
-    db.us = usData
-    db.eu = euData
-    db.jp = jpData
-    db.sa = saData
-    return db
+function outputData(baze, year){
+    return Object.keys(baze)
+            .reduce((acc, curr) =>{
+                acc[curr] = getData(baze[curr], year)
+                return acc
+            }, {})
 }
+
